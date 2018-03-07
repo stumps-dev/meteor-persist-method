@@ -12,8 +12,16 @@ Persister.call(name, arg1, arg2.., callback)
 Persister.apply(name, [args], options, callback)
 ```
 Now your methods will be stored in browser storage and called again on startup until eventually the server received the method call.
-### Overwriting methods stored
-If you want to persist 2 of the same methods and have the latter overwrite the first one you can give an id to the methods by passing it in the options argument, e.g.
+## Overwriting methods stored
+If you want to persist 2 methods and have the latter overwrite the first one you can give an id to the methods by passing it in the options argument, e.g.
 ```javascript
 Persister.apply(name, [args], { id: 'myAwsomeMethod' }, callback)
+```
+## Events
+You can track when methods are called by the persister (also on startup) or called by the server.
+```javascript
+Persister.on('method', (name, args, options) => {})
+
+Persister.on('methodFinished', (method, err, res) => {})
+//method = { name, args, options }
 ```

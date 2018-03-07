@@ -36,10 +36,10 @@ Persister.apply = function (name, args, options, callback) {
 
   //persist method call
   const key = options.id || Random.id()
-  delete options.id
 
   const poptions = Object.assign({}, options)
   delete poptions.onResultReceived //we can't store functions in browser storage obviously
+  delete poptions.id
 
   const value = [
     name,
@@ -56,9 +56,9 @@ Persister.apply = function (name, args, options, callback) {
   const obsCallback = (err, res) => {
 
     const method = {
-      name: value[0],
-      args: value[1],
-      options: value[2]
+      name,
+      args,
+      options
     }
 
     Persister.emit('methodFinished', method, err, res)
@@ -88,9 +88,9 @@ Meteor.startup(() => {
       for (key in methods) {
 
         const mthd = methods[key]
-        const name = mthd.n
-        const args = mthd.a
-        const options = mthd.o
+        const name = mthd[0]
+        const args = mthd[1]
+        const options = mthd[2]
 
         Persister.emit('method', name, args, options)
 
